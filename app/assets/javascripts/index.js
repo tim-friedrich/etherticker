@@ -3,8 +3,8 @@ $(function(){
     nv.addGraph(function() {
       //data = testData(['Unique', 'Visits'], 30)
       var chart = nv.models.lineChart()
-          // .useInteractiveGuideline(true)
-          .margin({top: 0, bottom: 25, left: 25, right: 0})
+          //.useInteractiveGuideline(true)
+          .margin({top: 0, bottom: 25, left: 35, right: 35})
           //.showLegend(false)
           .color([
               '#6294c9', '#59bc79'
@@ -23,7 +23,7 @@ $(function(){
           .transition().duration(500)
           .call(chart);
 
-      // PjaxApp.onResize(chart.update);
+      $(window).on('resize', chart.update);
 
       return chart;
     });

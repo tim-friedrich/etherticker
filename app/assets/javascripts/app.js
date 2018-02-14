@@ -101,11 +101,11 @@ $(function(){
         }
     });
 
-    $(window).resize(function(){
-        //if ($(window).width() < 768){
-            closeNavigation();
-        //}
-    });
+    // $(window).resize(function(){
+    //     //if ($(window).width() < 768){
+    //         closeNavigation();
+    //     //}
+    // });
 
     $(document).on('pjax-app:loaded', function(){
         if ($(window).width() < 768){
