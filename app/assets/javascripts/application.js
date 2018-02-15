@@ -13,4 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require d3/d3
+//= require nvd3/build/nv.d3
 //= require_tree .
