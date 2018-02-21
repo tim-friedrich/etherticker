@@ -10,11 +10,13 @@ $(function(){
     "12M": dataRootUrl + "histoday?fsym=ETH&tsym=USD&limit=365&aggregate=1",
     "all": dataRootUrl + "histoday?fsym=ETH&tsym=USD&limit=60&aggregate=1"
   }
-  var chart;
+  var chart,
+      candleChart;
 
   function fetchChartData(url){
     $.get( url, function( data ) {
-      chart.update(parseData(data));
+      chart.update(parseDataForLine(data));
+      candleChart.update(parseDataForCandle(data.Data));
     });
   }
 
@@ -23,13 +25,23 @@ $(function(){
       'data': [{ 'values': [] }]
     };
     chart = $("#line-chart").lineChart(options);
+    candleChart = $("#candle-chart").candleStickChart(options);
+
     $("#range-picker").on("click", function(e){
       fetchChartData(chartDataPaths[$(e.target).data('range')]);
     });
     fetchChartData("https://min-api.cryptocompare.com/data/histoday?fsym=ETH&tsym=USD&limit=30&aggregate=1");
   }
 
-  function parseData(rawData){
+  function parseDataForCandle(rawData){
+    var parsedData = [];
+    $(rawData).each(function(_, dataPoint){
+      dataPoint.time = new Date(dataPoint.time*1000)
+      parsedData.push(dataPoint);
+    })
+    return parsedData;
+  }
+  function parseDataForLine(rawData){
     var parsedData = [
       {
         'key': 'USD',
