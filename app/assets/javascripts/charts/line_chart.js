@@ -65,7 +65,7 @@
 
     function addAxis(){
       // use format map for time format/resolution
-      xAxis = d3.axisBottom(x).tickPadding(10).ticks(9);//.tickFormat(d3.timeFormat("%m/%y")).ticks(4);
+      xAxis = d3.axisBottom(x).tickPadding(10).ticks(9);
 
       yAxis = d3.axisLeft(y).ticks(6);
 

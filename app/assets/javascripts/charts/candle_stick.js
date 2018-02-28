@@ -17,7 +17,8 @@
       yAxis,
       path,
       yMin,
-      yMax;
+      yMax,
+      rect;
 
     // public functions
 
@@ -56,7 +57,6 @@
       y = d3.scaleLinear()
 
       line = d3.line()
-
     }
 
     function updateAxis(){
@@ -92,6 +92,8 @@
           .attr("height", height + margin.top + margin.bottom)
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      rect = chart.selectAll("rect").data(data)
 
       initScale();
       addAxis();
@@ -142,21 +144,24 @@
         .attr('y2', function(d,i) { return y(d.low); })
         .attr('stroke', 'black')
         .exit()
-        .remove();
+        .remove()
+        .transition()
+        .duration(pathAnimationDuration)
 
-      chart.selectAll("rect")
-          .data(data.slice(1))
-          .enter()
-          .append("svg:rect")
-          .attr("width", function(d){ return X})
-          // .attr("x", function(d,i) { return x(d.time) - X; })
-          .attr("x", function(d,i) { return x(d.time) - X; })
-          .attr("y", function(d,i) { return y(Math.max(d.open, d.close)); })
-          .attr("height", function(d,i) { return y(Math.min(d.open, d.close)) - y(Math.max(d.open, d.close)); })
-          .attr("fill", function (d) { return d.open > d.close ? "red" : "green" })
-          .attr("stroke", "black")
-          .exit()
-          .remove();
+      rect
+        .data(data.slice(1))
+        .enter()
+        .append("svg:rect")
+        .attr("width", function(d){ return X})
+        // .attr("x", function(d,i) { return x(d.time) - X; })
+        .attr("x", function(d,i) { return x(d.time) - X; })
+        .attr("y", function(d,i) { return y(Math.max(d.open, d.close)); })
+        .attr("height", function(d,i) { return y(Math.min(d.open, d.close)) - y(Math.max(d.open, d.close)); })
+        .attr("fill", function (d) { return d.open > d.close ? "red" : "green" })
+        .attr("stroke", "black")
+        .transition()
+        .duration(pathAnimationDuration);
+      rect.exit().remove();
     }
 
     function drawLine(){

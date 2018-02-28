@@ -1,0 +1,4 @@
+FetchPriceData:
+  description: 'Loads the latest prices of etherium'
+  cron: "* * * * *"
+  queue: high
