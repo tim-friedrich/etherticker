@@ -11,20 +11,21 @@ class FetchPriceData
   end
 
   def self.fetch_month
-    url = URI(@base_url + "histoday?fsym=ETH&tsym=USD&limit=30&aggregate=1")
+    url = URI(@base_url + "histoday?fsym=ETH&tsym=USD&limit=2000")
     respond = JSON.parse(Net::HTTP.get(url))
     # TODO error handling
     unless respond && respond['Response'] == "Success"
-      puts "failed to fetch monthly data"
+      puts "failed to fetch daily data"
       return
     end
-    save_data('month_price', respond["Data"])
+    # TODO reduce to days with data present
+    save_data('price/day', respond["Data"])
     return respond["Data"]
   end
 
 
 
   def self.save_data(key, data)
-    $redis.set(key, data)
+    $redis.set(key, data.to_json)
   end
 end

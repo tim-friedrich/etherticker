@@ -1,22 +1,27 @@
 $(function(){
   var dataRootUrl = "https://min-api.cryptocompare.com/data/"
+  var today = new Date();
   var chartDataPaths = {
     "1h": dataRootUrl + "histoday?fsym=ETH&tsym=USD&limit=60&aggregate=1",
     "24h": dataRootUrl + "histoday?fsym=ETH&tsym=USD&limit=60&aggregate=1",
     "48h": dataRootUrl + "histoday?fsym=ETH&tsym=USD&limit=60&aggregate=1",
-    "30d": dataRootUrl + "histoday?fsym=ETH&tsym=USD&limit=30&aggregate=1",
-    "3M": dataRootUrl + "histoday?fsym=ETH&tsym=USD&limit=90&aggregate=1",
-    "6M": dataRootUrl + "histoday?fsym=ETH&tsym=USD&limit=180&aggregate=1",
-    "12M": dataRootUrl + "histoday?fsym=ETH&tsym=USD&limit=365&aggregate=1",
-    "all": dataRootUrl + "histoday?fsym=ETH&tsym=USD&limit=60&aggregate=1"
+    "30d": "/price/day?limit=30&start="+daysAgo(30),
+    "3M": "/price/day?limit=30&start="+daysAgo(90),
+    "6M": "/price/day?limit=30&start="+daysAgo(180),
+    "12M": "/price/day?limit=30&start="+daysAgo(365),
+    "all": "/price/day?limit=30&start=-1"
   }
   var chart,
       candleChart;
 
+  function daysAgo(days){
+    return parseInt(new Date().setDate(today.getDate()-days)/1000);
+  }
+
   function fetchChartData(url){
     $.get( url, function( data ) {
-      chart.update(parseDataForLine(data));
-      candleChart.update(parseDataForCandle(data.Data));
+      //chart.update(parseDataForLine(data));
+      candleChart.update(parseDataForCandle(data));
     });
   }
 
@@ -24,7 +29,7 @@ $(function(){
     var options = {
       'data': [{ 'values': [] }]
     };
-    chart = $("#line-chart").lineChart(options);
+    //chart = $("#line-chart").lineChart(options);
     candleChart = $("#candle-chart").candleStickChart(options);
 
     $("#range-picker").on("click", function(e){
